@@ -11,8 +11,11 @@ class Seagull (Context, event.Event):
         self.name = "seagull visitor"
         self.seagulls = 1
         self.verbs['chase'] = self
-        self.verbs['feed'] = self
-        self.verbs['help'] = self
+        self.verbs['health']= self
+        self.verbs['fight'] = self
+        self.verbs['wave']  = self
+        self.verbs['health']= self
+        self.verbs['defeat'] = self
         self.result = {}
         self.go = False
 
@@ -21,28 +24,28 @@ class Seagull (Context, event.Event):
             self.go = True
             r = random.randint(1,10)
             if (r < 5):
-                self.result["message"] = "the seagulls fly off."
+                self.result["message"] = "the seagulls don't fly off."
                 if (self.seagulls > 1):
                     self.seagulls = self.seagulls - 1
             else:
                 c = random.choice(config.the_player.get_pirates())
                 if (c.lucky == True):
-                    self.result["message"] = "luckly, the seagulls fly off."
+                    self.result["message"] = "Sorry,the seagulls doesn't fly off."
                 else:
-                    self.result["message"] = c.get_name() + " is attacked by the seagulls."
-                    if (c.inflict_damage (self.seagulls, "Pecked to death by seagulls")):
+                    self.result["message"] = c.get_name() + "seagulls heading towards your direction."
+                    if (c.inflict_damage (self.seagulls, "Almost pecked to death by seagulls")):
                         self.result["message"] = ".. " + c.get_name() + " is pecked to death by the seagulls!"
 
-        elif (verb == "feed"):
+        elif (verb == "fight"):
             self.seagulls = self.seagulls + 1
             self.result["newevents"].append (Seagull())
-            self.result["message"] = "the seagulls are happy"
+            self.result["message"] = "the seagulls are more aggressive"
             self.go = True
         elif (verb == "help"):
-            print ("the seagulls will pester you until you feed them or chase them off")
+            print ("the seagulls will pester you until you kill them all")
             self.go = False
         else:
-            print ("it seems the only options here are to feed or chase")
+            print ("it seems the only options here are to fight them off")
             self.go = False
 
 
@@ -52,7 +55,7 @@ class Seagull (Context, event.Event):
         self.go = False
         self.result = {}
         self.result["newevents"] = [ self ]
-        self.result["message"] = "default message"
+        self.result["message"] = "The first wave of seagulls are gone. You survived the first wave of seagulls"
 
         while (self.go == False):
             print (str (self.seagulls) + " seagulls has appeared what do you want to do?")

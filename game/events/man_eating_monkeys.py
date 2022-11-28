@@ -1,9 +1,9 @@
 from game import event
 import random
 from game.combat import Combat
-from game.combat import Macaque
-from game.display import announce
 import game.config as config
+
+
 
 class ManEatingMonkeys (event.Event):
 
