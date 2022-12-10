@@ -31,18 +31,24 @@ class CrewMate(Context):
         self.skills["guns"] = random.randrange(10,101)
         self.skills["cannons"] = random.randrange(10,101)
         self.skills["swimming"] = random.randrange(10,101)
+        self.skills["Axe"] = random.randrange(10,101)
+        self.skills["Cutlass"] = random.randrange(10,101)
 
         #list of equipped items. Currently only used in combat.
         self.items = []
         self.items.append(Cutlass())
         self.items.append(Flintlock())
+        self.items.append(Axe())
+        self.items.append(Guns())
+        self.items.append(brawling())
+        self.items.append(swords())
         self.powder = 32
 
         #Status effects
         self.sick = False
         self.lucky = False
 
-        #Things a pirate can do. Use name X to use (ex: anne equip flintlock)
+        #Things a crew can do. Use name X to use (ex: anne equip flintlock)
         self.verbs['equip'] = self
         self.verbs['unequip'] = self
         self.verbs['inventory'] = self
@@ -60,7 +66,7 @@ class CrewMate(Context):
         return self.health
 
     def receive_medicine (self, num):
-        '''Makes the pirate no longer sick (but doesn't remove sickness event)'''
+        '''Makes the crew no longer sick (but doesn't remove sickness event)'''
         if (num > 0):
             self.sick = False
             announce (self.name + " takes the medicine and is no longer sick!")

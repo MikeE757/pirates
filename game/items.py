@@ -24,7 +24,7 @@ class Cutlass(Item):
     def __init__(self):
         super().__init__("cutlass", 5) #Note: price is in shillings (a silver coin, 20 per pound)
         self.damage = (10,60)
-        self.skill = "swords"
+        self.skill = "cutlass"
         self.verb = "slash"
         self.verb2 = "slashes"
 
@@ -37,4 +37,46 @@ class Flintlock(Item):
         self.skill = "guns"
         self.verb = "shoot"
         self.verb2 = "shoots"
+
+class Axe(Item):
+    def __init__(self):
+        super().__init__("Axe",500)
+        self.damage = (35,75)
+        self.skill = "Axe"
+        self.verb = "cut"
+        self.verb2 = "cuts"
+
+class Guns(Item):
+    def __init__(self):
+        super().__init__("Guns",300)
+        self.damage = (10,100)
+        self.firearm = True
+        self.charge = True
+        self.skill = "guns"
+        self.verb = "shoot"
+        self.verb2 = "shoots"
+
+
+class brawling(Item):
+    def __init__(self):
+        super().__init__("brawling",200)
+        self.damage = (10,25)
+        self.verb = "punch"
+        self.verb2 = "punches"
+
+
+class swords(Item):
+    def __init__(self):
+        super().__init__("swords",5)
+        self.damage = (10,70)
+        self.skill = "swords"
+        self.verb = "slash"
+        self.verb2 = "slashes"
+
+
+        
+        
+        
+
+       
 

@@ -45,11 +45,11 @@ class Combat():
             ready = [c for c in combatants if c.cur_move == max_move]
             moving = random.choice(ready)
             moving.cur_move = 0
-            options = []
-            attacks = []
-            items = []
             if isinstance(moving, CrewMate):
                 announce(moving.name + " has seized  the initiative! What should they do?",pause=False)
+                options = []
+                attacks = []
+                items = []
                 for t in self.monsters:
                     options.append("attack " + t.name)
                 choice = menu (options)
@@ -85,12 +85,7 @@ class Combat():
             if roll < chosen_attk.success:
                 announce (moving.name + " " + chosen_attk.description + " " + chosen_target.name + "!")
                 damage = random.randrange(chosen_attk.damage_range[0],chosen_attk.damage_range[1]+1)
-                deathcause = "slain by a " + moving.name + "'s " + chosen_attk.name
-                chosen_target.inflict_damage(damage, deathcause)
-                if chosen_target.health <= 0:
-                    announce (chosen_target.name + " is killed!")
-
-                    
+                chosen_target.inflict_damage(damage, "slain by a " + moving.name + "'s " + chosen_attk.name)
             elif (roll == chosen_attk.success):
                 announce (moving.name + " barely misses " + chosen_target.name + "!")
             else:
@@ -110,22 +105,19 @@ class Monster:
         self.health = self.health - num
         if(self.health > 0):
             return False
+        announce (self.name + " is killed!")
         return True
     
 
 class Macaque(Monster):
     def __init__ (self, name):
-        attacks = {}
-        attacks["bite"] = ["bites",random.randrange(70,101), (10,20)]
-        #7 to 19 hp, bite attack, 160 to 200 speed (100 is "normal")
-        super().__init__(name, random.randrange(7,20), attacks, 180 + random.randrange(-20,21))
+        super().__init__(name, random.randrange(7,20), {"bite":["bites",random.randrange(70,101), (10,20)]}, 180 + random.randrange(-20,21))
 
 class Drowned(Monster):
     def __init__ (self, name):
-        attacks = {}
-        attacks["bite"] = ["bites",random.randrange(35,51), (5,15)]
-        attacks["punch 1"] = ["punches",random.randrange(35,51), (1,10)]
-        attacks["punch 2"] = ["punches",random.randrange(35,51), (1,10)]
-        #7 to 19 hp, bite attack, 65 to 85 speed (100 is "normal")
-        super().__init__(name, random.randrange(7,20), attacks, 75 + random.randrange(-10,11))
+        super().__init__(name, random.randrange(7,20), {"bite":["bites",random.randrange(35,51), (5,15)],"punch":["punches",random.randrange(35,51), (1,10)],"punch":["punches",random.randrange(35,51), (1,10)]}, 75 + random.randrange(-10,11))
+
+class Monsterseagulls(Monster):
+    def __init__(self,name):
+        super().__init__(name,random.randrange(8,30),{"peck":["pecks",random.randrange(65,90), (10,35)]},100 + random.randrange(-30,31))
 
