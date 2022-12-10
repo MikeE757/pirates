@@ -1,7 +1,9 @@
 from game import event
 import random
 from game.combat import Combat
+from game.combat import Macaque
 import game.config as config
+from game.display import announce
 
 
 
