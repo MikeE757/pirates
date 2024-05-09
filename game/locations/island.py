@@ -9,13 +9,14 @@ class Island (location.Location):
 
     def __init__ (self, x, y, w):
         super().__init__(x, y, w)
-        self.name = "island"
-        self.symbol = 'I'
+        self.name = "Redsand Island"
+        self.symbol = 'R'
         self.visitable = True
         self.starting_location = Beach_with_ship(self)
         self.locations = {}
         self.locations["beach"] = self.starting_location
         self.locations["trees"] = Trees(self)
+        
 
     def enter (self, ship):
         print ("arrived at an island")
