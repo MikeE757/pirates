@@ -337,4 +337,5 @@ while True:
          print("You didn't find the treasure.Keep searching!")
      print("\nGame Over")
      #test2
+     #Hi
 
