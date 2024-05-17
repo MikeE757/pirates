@@ -3,6 +3,7 @@ import game.config as config
 from game.display import announce
 from game.events import *
 import game.items as items
+import random
 
 class Island (location.Location):
 
@@ -15,12 +16,12 @@ class Island (location.Location):
         self.locations = {}
         self.locations["beach"] = self.starting_location
         self.locations["trees"] = Trees(self)
-        self.location["Sand"] = Sand(self)
-        self.location["Cave"]= Cave(self)
-        self.location["Boulders"] = Boulders(self)
+        self.locations["Sand"] = Sand(self)
+        self.locations["Cave"]= Cave(self)
+        self.locations["Boulders"] = Boulders(self)
         self.locations["Treasure"] = Treasure
         self.locations["Forest"] = Forest(self)
-        self.locations[""]
+        # self.locations[""]
         
 
     def enter (self, ship):
@@ -84,7 +85,7 @@ class Sand(location.SubLocation):
         self.verbs['east'] = self
         self.verbs['west'] = self
         self.verbs['take'] = self
-        self.item
+        # self.item
 
 class Cave(location.SubLocation):
     def __init__(self,m):
@@ -95,7 +96,7 @@ class Cave(location.SubLocation):
         self.verbs['east'] = self
         self.verbs['west'] = self
         self.verbs['take'] = self
-        self.item
+        # self.item
 
 class Boulders(location.SubLocation):
     def __init__(self,m):
@@ -106,7 +107,7 @@ class Boulders(location.SubLocation):
         self.verbs['east'] = self
         self.verbs['west'] = self
         self.verbs['take'] = self
-        self.item
+        # self.item
 
 class Treasure(location.SubLocation):
     def __init__(self,m):
@@ -117,7 +118,7 @@ class Treasure(location.SubLocation):
         self.verbs['east'] = self
         self.verbs['west'] = self
         self.verbs['take'] = self
-        self.item
+        # self.item
 
 class Forest(location.SubLocation):
     def __init__(self,m):
@@ -128,7 +129,7 @@ class Forest(location.SubLocation):
         self.verbs['east'] = self
         self.verbs['west'] = self
         self.verbs['take'] = self
-        self.item
+        # self.item
 
     def enter (self):
         edibles = False
@@ -323,7 +324,7 @@ class Katana(items.Item):
 #Define the map with locations and their descriptions
 locations = {"beach": "You are standing on a sandy beach.","cave": "treasure" "You found the treasure" "You are at the entrance of a dark cave." , "forest": "You are in a dense forest with tall trees" "mountain""You are at the foot of a step mountain."}
 #Define the treasure location 
-treasure_location = random.choice(list(locations.keys))
+treasure_location = random.choice(list(locations.keys()))
 while True:
      print("\n-Pirate Puzzle Game-")
      print("Find the hidden treasure on the map!")
