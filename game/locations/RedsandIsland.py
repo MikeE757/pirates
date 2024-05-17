@@ -20,6 +20,7 @@ class Island (location.Location):
         self.location["Boulders"] = Boulders(self)
         self.locations["Treasure"] = Treasure
         self.locations["Forest"] = Forest(self)
+        self.locations[""]
         
 
     def enter (self, ship):
