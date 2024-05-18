@@ -337,7 +337,7 @@ while True:
      else:
          print("You didn't find the treasure.Keep searching!")
      print("\nGame Over")
-     
+     #Fixing the puzzel
 
 
 
