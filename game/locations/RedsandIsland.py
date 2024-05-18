@@ -18,7 +18,7 @@ class Island (location.Location):
         self.locations["trees"] = Trees(self)
         self.locations["Sand"] = Sand(self)
         self.locations["Cave"]= Cave(self)
-        self.locations["Boulders"] = Boulders(self)
+        self.locations["Boulder"] = Boulders(self)
         self.locations["Treasure"] = Treasure
         self.locations["Forest"] = Forest(self)
         # self.locations[""]
@@ -97,6 +97,67 @@ class Cave(location.SubLocation):
         self.verbs['west'] = self
         self.verbs['take'] = self
         # self.item
+class Cave(location.SubLocation):
+    def __init__(self, m):
+        super().__init__(m)
+        self.name = "Cave Entrance"
+        self.event_chance = 100
+        self.events.append(Cave())
+
+
+    def enter (self):
+        announce("You have arrived at the front of the Cave's entrance.")
+    
+    def process_verb (self, verb, cmd_list, nouns):
+        if (verb == "south" ):
+            config.the_player.next_loc = self.main_location.locations["beach"]
+        elif (verb == "north"):
+            config.the_player.next_loc = self.main_location.locations["Cave"]
+
+
+class Cave(location.SubLocation):
+    def __init__(self, m):
+        super().__init__(m)
+        self.name = "Cave"
+        self.verbs['read'] = self
+        self.tries = 0
+        self.solved = False
+
+    def enter (self):
+        announce("You defeated the enemies guarding the entrance. You notice a Boulder .")
+        announce("The boulder is blocking your path to the Forest. It seems to be a sign on the wall.")
+        announce("The sign has a riddle written on it.")
+
+    def process_verb(self, verb, cmd_list, nouns):
+        if (verb == "south"):
+            config.the_player.next_loc = self.main_location.locations["Cave"]
+        elif (verb == "north"):
+            config.the_player.next_loc = self.main_location.locations["Forest"]
+        elif (verb == "read"):
+            while self.solved == False:
+                print("If you want to make it to the Forest you must first solve this riddle"
+                  " The riddle states: 'I'm easy to pick up. But hard to throw. What am I")
+                print("You can enter the answer to the riddle or ask for a hint ")
+                answer = input("What is the answer to the riddle?: ")
+                if answer == "feather":
+                   
+
+                    announce("You have moved the Boulder. You can enter the Forest.")
+                    config.the_player.next_loc = self.main_location.locations["Forest"]
+                    self.solved = True
+                elif answer == "hint":
+                    print("I'm light")
+                
+                elif self.tries >= 2:
+                    print("You have gotten it wrong. It was an easy riddle! You can't enter the forest")
+                    config.the_player.gameInProgress = False
+                    config.the_player.kill_all_pirates("In the cave")
+                self.tries += 1
+
+
+
+
+
 
 class Boulders(location.SubLocation):
     def __init__(self,m):
@@ -324,44 +385,17 @@ class Katana(items.Item):
 
 #Define the map with locations and their descriptions
 locations = {"beach": "You are standing on a sandy beach.","cave": "treasure" "You found the treasure" "You are at the entrance of a dark cave." , "forest": "You are in a dense forest with tall trees" "mountain""You are at the foot of a step mountain."}
-class Cave(location.SubLocation):
-    def __init__(self, m):
-        super().__init__(m)
-        self.name = "Cave"
-        self.verbs['read'] = self
-        self.tries = 0
-        self.solved = False
-
-    def enter (self):
-        announce("You defeated the enemies guarding the entrance. You notice a Boulder .")
-        announce("The boulder is blocking your path to the Forest. It seems to be a sign on the wall.")
-        announce("The sign has a riddle written on it.")
-
-    def process_verb(self, verb, cmd_list, nouns):
-        if (verb == "south"):
-            config.the_player.next_loc = self.main_location.locations["Cave"]
-        elif (verb == "north"):
-            config.the_player.next_loc = self.main_location.locations["Forest"]
-        elif (verb == "read"):
-            while self.solved == False:
-                print("If you want to make it to the Forest you must first solve this riddle"
-                  " The riddle states:'I easy to lift.; but hard to throw.; "
-                  "What am I")
-                print("You can enter the answer to the riddle or ask for a hint ")
-                answer = input("What is the answer to the riddle?: ")
-                if answer == "feather":
-                   
-
-                    announce("You destoryed the boulder. You can now enter the Forest")
-                    config.the_player.next_loc = self.main_location.locations["Forest"]
-                    self.solved = True
-                elif answer == "hint":
-                    print("I'm light")
-                
-                elif self.tries >= 2:
-                    print("You have gotten it wrong. It was an easy riddle!")
-                    config.the_player.gameInProgress = False
-                    config.the_player.kill_all_pirates("")
-                self.tries += 1
-
-
+treasure_location = random.choice(list(locations.keys()))
+#Define the treasure location 
+treasure_location = random.choice(list(locations.keys()))
+while True:
+     print("\n-Pirate Puzzle Game-")
+     print("Answer!")
+     print("\n "+ locations[treasure_location])
+     direction = input("Enter a direction to move(north,south,east,west):").lower()
+     if direction == treasure_location:
+        print("\nCongratulations! You found the hidden treasure at the", treasure_location + "!")
+        break
+     else:
+         print("You didn't find the treasure.Keep searching!")
+     print("\nGame Over")
