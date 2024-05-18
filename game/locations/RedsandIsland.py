@@ -111,7 +111,7 @@ class Boulders(location.SubLocation):
 
 class Treasure(location.SubLocation):
     def __init__(self,m):
-        super().__init__(m)
+        super().__init__()
         self.name = "Sand"
         self.verbs['north'] = self
         self.verbs['south'] = self
@@ -336,6 +336,7 @@ while True:
      else:
          print("You didn't find the treasure.Keep searching!")
      print("\nGame Over")
-     #test2
-     #Hi
+     
+     
+
 
