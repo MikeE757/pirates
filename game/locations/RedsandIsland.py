@@ -131,6 +131,7 @@ class Forest(location.SubLocation):
         self.verbs['take'] = self
         # self.item
 
+
     def enter (self):
         edibles = False
         for e in self.events:
@@ -337,6 +338,6 @@ while True:
          print("You didn't find the treasure.Keep searching!")
      print("\nGame Over")
      
-     
+
 
 
