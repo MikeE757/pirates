@@ -88,3 +88,37 @@ class Drowned(Monster):
         #7 to 19 hp, bite attack, 65 to 85 speed (100 is "normal")
         super().__init__(name, random.randrange(7,20), attacks, 75 + random.randrange(-10,11))
 
+class Skeleton(Monster):
+    def __init__(self, name):
+        attacks = {}
+        attacks["bite"] = ["bites", random.randrange(35, 51), (5, 15)]
+        attacks["Venom Scratch"] = ["punches", random.randrange(35, 51), (1, 10)]
+        attacks["Bone Cut"] = ["punches", random.randrange(35, 51), (1, 10)]
+        # 7 to 19 hp, bite attack, 65 to 85 speed (100 is "normal")
+        super().__init__(name, random.randrange(7, 20), attacks, 75 + random.randrange(-10, 11))
+
+
+class Gorilla(Monster):
+    def __init__(self, name):
+        attacks = {}
+        attacks["Super Punch"] = ["burns", random.randrange(70, 101), (10, 20)]
+        attacks["Super Bite"] = ["slices", random.randrange(71,100), (10,20)]
+        # 7 to 19 hp, bite attack, 160 to 200 speed (100 is "normal")
+        super().__init__(name, random.randrange(100, 150), attacks, 180 + random.randrange(-20, 21))
+
+
+class Tarantula(Monster):
+    def __init__(self, name):
+        attacks = {}
+        attacks["Venom"] = ["pushes", random.randrange(70, 80), (20, 25)]
+        attacks["Web"] = ["pulls", random.randrange(90, 100), (15, 20)]
+        # 7 to 19 hp, bite attack, 160 to 200 speed (100 is "normal")
+        super().__init__(name, random.randrange(200, 250), attacks, 180 + random.randrange(-20, 21))
+
+
+
+
+
+
+
+
