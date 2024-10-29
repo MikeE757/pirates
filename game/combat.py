@@ -3,7 +3,7 @@ import game.config as config
 import game.crewmate as crew
 import game.superclasses as superclasses
 from game.context import Context
-from game.display import announce
+import game.display as display
 from game.display import menu
 
 class Combat():
@@ -11,12 +11,9 @@ class Combat():
     def __init__ (self, monsters):
         self.monsters = monsters
 
-    def process_verb (self, verb, cmd_list, nouns):
-        print (self.nouns + " can't " + verb)
-
     def crewmateAction(self, attacker, allies, enemies):
         """The player chooses an action for a crewmate to take."""
-        announce(attacker.get_name() + " has seized the initiative! What should they do?",pause=False)
+        display.announce(f"{attacker.get_name()} has seized the initiative! What should they do?", pause=False)
         actions = attacker.getAttacks()
         # actions = attacker.getMiscActions()
         if len(actions) > 0:
@@ -47,8 +44,8 @@ class Combat():
                 if(chosen_action != None):
                     chosen_targets = chosen_action.pickTargets(chosen_action, moving, config.the_player.get_pirates(), self.monsters)
             else:
-                chosen_targets = [random.choice(config.the_player.get_pirates())]
                 chosen_action = moving.pickAction()
+                chosen_targets = moving.pickTargets(chosen_action, moving, self.monsters, config.the_player.get_pirates())
             #Resolve
             chosen_action.resolve(chosen_action, moving, chosen_targets)
             self.monsters = [m for m in self.monsters if m.health >0]
@@ -72,12 +69,8 @@ class Monster(superclasses.CombatCritter):
         attacks = self.getAttacks()
         return random.choice(attacks)
 
-class Macaque(Monster):
-    def __init__ (self, name):
-        attacks = {}
-        attacks["bite"] = ["bites",random.randrange(70,101), (10,20)]
-        #7 to 19 hp, bite attack, 160 to 200 speed (100 is "normal")
-        super().__init__(name, random.randrange(7,20), attacks, 180 + random.randrange(-20,21))
+    def pickTargets(self, action, attacker, allies, enemies):
+        return [random.choice(enemies)]
 
 class Drowned(Monster):
     def __init__ (self, name):
@@ -87,6 +80,7 @@ class Drowned(Monster):
         attacks["punch 2"] = ["punches",random.randrange(35,51), (1,10)]
         #7 to 19 hp, bite attack, 65 to 85 speed (100 is "normal")
         super().__init__(name, random.randrange(7,20), attacks, 75 + random.randrange(-10,11))
+        self.type_name = "Drowned Pirate"
 
 class Skeleton(Monster):
     def __init__(self, name):
@@ -96,6 +90,7 @@ class Skeleton(Monster):
         attacks["Bone Cut"] = ["punches", random.randrange(35, 51), (1, 10)]
         # 7 to 19 hp, bite attack, 65 to 85 speed (100 is "normal")
         super().__init__(name, random.randrange(7, 20), attacks, 75 + random.randrange(-10, 11))
+        self.type_name = "Skeleton"
 
 
 class Gorilla(Monster):
@@ -105,6 +100,7 @@ class Gorilla(Monster):
         attacks["Super Bite"] = ["slices", random.randrange(71,100), (10,20)]
         # 7 to 19 hp, bite attack, 160 to 200 speed (100 is "normal")
         super().__init__(name, random.randrange(100, 150), attacks, 180 + random.randrange(-20, 21))
+        self.type_name = "Gorilla"
 
 
 class Tarantula(Monster):
@@ -114,11 +110,4 @@ class Tarantula(Monster):
         attacks["Web"] = ["pulls", random.randrange(90, 100), (15, 20)]
         # 7 to 19 hp, bite attack, 160 to 200 speed (100 is "normal")
         super().__init__(name, random.randrange(200, 250), attacks, 180 + random.randrange(-20, 21))
-
-
-
-
-
-
-
-
+        self.type_name = "Tarantula"

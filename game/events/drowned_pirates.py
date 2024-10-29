@@ -2,7 +2,7 @@ import game.event as event
 import random
 import game.combat as combat
 import game.superclasses as superclasses
-from game.display import announce
+import game.display as display
 
 class DrownedPirates (event.Event):
     '''
@@ -24,6 +24,7 @@ class DrownedPirates (event.Event):
             min = 1
             uplim = 5
             monsters.append(combat.Drowned("Pirate captain"))
+            self.type_name = "Drowned Pirate Captain"
             monsters[0].speed = 1.2*monsters[0].speed
             monsters[0].health = 2*monsters[0].health
         n_appearing = random.randrange(min, uplim)
@@ -31,7 +32,7 @@ class DrownedPirates (event.Event):
         while n <= n_appearing:
             monsters.append(combat.Drowned("Drowned pirate "+str(n)))
             n += 1
-        announce ("You are attacked by a crew of drowned pirates!")
+        display.announce ("You are attacked by a crew of drowned pirates!")
         combat.Combat(monsters).combat()
         result["newevents"] = [ self ]
         return result

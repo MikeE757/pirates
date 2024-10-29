@@ -1,3 +1,4 @@
+import game.display as display
 
 class Context:
 
@@ -6,5 +7,4 @@ class Context:
         self.nouns = {}   # in game name of an object
 
     def process_verb (self, verb, cmd_list, nouns):
-        print (self.nouns + " can't " + verb)
-
+        display.announce(f"{self.nouns} can't {verb}", pause=False)

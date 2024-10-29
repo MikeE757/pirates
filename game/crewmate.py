@@ -2,11 +2,12 @@
 import random
 import game.combat as combat
 import game.superclasses as superclasses
-from game.display import announce
+import game.display as display
 import game.items as items
 from game.context import Context
 import game.config as config
 
+skill_icons = {"brawling": "👊 ", "swords": "⚔️  ", "melee": "🏏 ", "guns": "🔫 ", "cannons": "🏴‍☠️   ", "swimming": "🏊 "}
 
 class CrewMate(Context, superclasses.CombatCritter):
     '''Describes a pirate crewmate. The player controls these.'''
@@ -57,7 +58,7 @@ class CrewMate(Context, superclasses.CombatCritter):
 
     def __str__ (self):
         '''to string. Lists name and death cause (for score log)'''
-        return self.name + " " + self.death_cause
+        return f"{self.name} {self.death_cause}"
 
     def get_health (self):
         return self.health
@@ -66,13 +67,13 @@ class CrewMate(Context, superclasses.CombatCritter):
         '''Makes the pirate no longer sick (but doesn't remove sickness event)'''
         if (num > 0):
             self.sick = False
-            announce (self.name + " takes the medicine and is no longer sick!")
+            display.announce(f"{self.name} takes the medicine and is no longer sick!")
 
     def inflict_damage (self, num, deathcause, combat=False):
         '''Injures the pirate. If needed, it will record the pirate's cause of death'''
         if combat and len(self.defenders) > 0:
             defender = random.choice (self.defenders)
-            announce (f"{defender.name} blocks the attack!")
+            display.announce (f"{defender.name} blocks the attack!")
             return defender.inflict_damage ((num+1)//2, deathcause, False) #Combat should be false here to avoid possible infinite recursion.
         #else:
         self.health = self.health - num
@@ -115,7 +116,7 @@ class CrewMate(Context, superclasses.CombatCritter):
         if (self.sick):
             self.inflict_damage (1, "Died of their illness")
             if(self.health <= 0):
-                announce(self.name + " has died of their illness!")
+                display.announce(f"{self.name} has died of their illness!")
         elif self.hurtToday == True:
             self.hurtToday = False
         elif self.health < 100:
@@ -147,20 +148,23 @@ class CrewMate(Context, superclasses.CombatCritter):
 
     def print (self):
         '''Prints status to terminal'''
-        outstring = "   " + self.name + " Health: " + str(self.health)
+        outstring = f"   {self.name} Health: {self.health}"
         if (self.sick):
             outstring = outstring + " --Sick"
         if (self.isLucky()):
             outstring = outstring + " ++Lucky"
 
-        print (outstring)
+        display.announce (outstring, pause=False)
 
     def print_skills (self):
         '''Prints status to terminal'''
-        outstring = self.name + ":" + " "*(CrewMate.longest_name+1-len(self.name))
+        outstring = f"{self.name}:{' ' * (CrewMate.longest_name + 1 - len(self.name))}"
         for k in self.skills.keys():
-            outstring = outstring + k + ":" + str(self.skills[k]) + " "
-        print (outstring)
+            outstring += f"{k}: {self.skills[k]}"
+            if k in skill_icons.keys():
+                outstring += skill_icons[k]
+            outstring += " "
+        display.announce (outstring, pause=False)
 
     def process_verb (self, verb, cmd_list, nouns):
         '''Processes commands'''
@@ -176,7 +180,7 @@ class CrewMate(Context, superclasses.CombatCritter):
                         break
                     i += 1
             else:
-                announce ("Equip what?")
+                display.announce ("Equip what?")
 
         #The pirate un-equips an item (based on the name of the item)
         elif (verb == "unequip"):
@@ -190,7 +194,7 @@ class CrewMate(Context, superclasses.CombatCritter):
                         break
                     i += 1
             else:
-                announce ("Unequip what?")
+                display.announce ("Unequip what?")
 
         #Prints a pirate's equipped items
         elif (verb == "inventory"):
@@ -199,18 +203,18 @@ class CrewMate(Context, superclasses.CombatCritter):
         #Orders a pirate to restock their black powder (can only be done on ship)
         elif (verb == "restock"):
             if config.the_player.location != config.the_player.ship:
-                announce ("Powder and shot can only be restocked on the ship!")
+                display.announce ("Powder and shot can only be restocked on the ship!")
             else:
                 self.restock()
         elif (verb == "skills"):
             self.print_skills ()
         else:
-            print (self.name + " doesn't know how to " + verb)
+            display.announce(f"{self.name} doesn't know how to {verb}", pause=False)
 
     def print_inventory (self):
         for i in self.items:
-            print (i)
-        print ()
+            display.announce (i, pause=False)
+        display.announce ("", pause=False)
 
     def restock(self):
         '''pirate restocks their black powder from the ship's reserves'''
@@ -222,14 +226,14 @@ class CrewMate(Context, superclasses.CombatCritter):
             self.powder += config.the_player.powder
             config.the_player.powder = 0
         if restock_needed == 0:
-            announce (self.name + " doesn't need a restock!")
+            display.announce (self.name + " doesn't need a restock!")
         elif config.the_player.powder == 0:
             if restock_needed < (32 - self.powder):
-                announce (self.name + " takes the last powder!")
+                display.announce (self.name + " takes the last powder!")
             else:
-                announce (self.name + " reports that the ship is out of powder!")
+                display.announce (self.name + " reports that the ship is out of powder!")
         else:
-            announce (self.name + " restocks their powder and shot!")
+            display.announce (self.name + " restocks their powder and shot!")
 
     def reload(self):
         '''pirate reloads their firearms (flintlock pistols are too time consuming to load in combat)'''

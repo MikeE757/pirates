@@ -1,7 +1,7 @@
 
 import random
 from game.context import Context
-from game.display import announce
+import game.display as display
 import game.config as config
 
 class Ship (Context):
@@ -46,27 +46,27 @@ class Ship (Context):
                         nouns[cmd_list[3]].receive_medicine(1)
                         self.medicine =  self.medicine - 1
                     else:
-                        announce ("no more medicine to give")
+                        display.announce ("no more medicine to give")
             else:
-                announce ("Give medicine to who?")
+                display.announce ("Give medicine to who?")
         else:
-            announce ("Error: Ship object doe not understand verb " + verb)
+            display.announce ("Error: Ship object doe not understand verb " + verb)
 
 
     def print (self):
-        print ("ship is at: " + str(self.loc.get_x()) + ", " + str(self.loc.get_y()))
+        display.announce(f"ship is at: {self.loc.get_x()}, {self.loc.get_y()}", pause=False)
         if ((self.hx==0) and (self.hy==0)):
-            print ("ship anchored")
+            display.announce ("ship anchored", pause=False)
         elif ((self.hx == 1) and (self.hy == 0)):
-            print ("ship heading is east")
+            display.announce ("ship heading is east", pause=False)
         elif ((self.hx == -1) and (self.hy == 0)):
-            print ("ship heading is west")
+            display.announce ("ship heading is west", pause=False)
         elif ((self.hx == 0) and (self.hy == -1)):
-            print ("ship heading is north")
+            display.announce ("ship heading is north", pause=False)
         elif ((self.hx == 0) and (self.hy == 1)):
-            print ("ship heading is south")
+            display.announce ("ship heading is south", pause=False)
 
-        print ("ship has " + str (self.medicine) + " medicine")
+        display.announce(f"ship has {self.medicine} medicine", pause=False)
 
     def get_loc (self):
         return self.loc
