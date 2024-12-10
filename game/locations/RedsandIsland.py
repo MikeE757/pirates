@@ -1,6 +1,6 @@
 from game import location
 import game.config as config
-from game.display import announce
+import game.display as display
 from game.events import *
 import game.items as items
 import random
@@ -45,17 +45,17 @@ class Beach_with_ship (location.SubLocation):
         self.events.append(drowned_pirates.DrownedPirates())
 
     def enter (self):
-        announce ("arrive at the beach. Your ship is at anchor in a small bay to the south.")
+        display.announce ("arrive at the beach. Your ship is at anchor in a small bay to the south.")
 
     def process_verb (self, verb, cmd_list, nouns):
         if (verb == "south"):
-            announce ("You return to your ship.")
+            display.announce ("You return to your ship.")
             config.the_player.next_loc = config.the_player.ship
             config.the_player.visiting = False
         elif (verb == "north"):
             config.the_player.next_loc = self.main_location.locations["trees"]
         elif (verb == "east" or verb == "west"):
-            announce ("You walk all the way around the island on the beach. It's not very interesting.")
+            display.announce ("You walk all the way around the island on the beach. It's not very interesting.")
 
 
 class Trees (location.SubLocation):
@@ -73,7 +73,7 @@ class Trees (location.SubLocation):
         self.item_in_clothes = items.Flintlock()
 
         self.event_chance = 50
-        self.events.append(man_eating_monkeys.ManEatingMonkeys())
+        #self.events.append(man_eating_monkeys.ManEatingMonkeys())
         self.events.append(drowned_pirates.DrownedPirates())
 
 class Sand(location.SubLocation):
@@ -85,28 +85,42 @@ class Sand(location.SubLocation):
         self.verbs['east'] = self
         self.verbs['west'] = self
         self.verbs['take'] = self
+        self.event_chance = 25
+        self.events.append(seagull.Seagull())
+
+    def enter (self):
+        description = "You walk upon the beach. You entered into a Cave."
+        display.announce(description)
+
+    def process_verb (self, verb, cmd_list, nouns):
+        if (verb == "south"):
+            config.the_player.next_loc = self.main_location.location["Cave"]
+        if (verb == "east"):
+            config.the_player.next_loc = self.main_location.locations["Treasure"]
+        if (verb == "west"):
+            config.the_player.next_loc = self.main_location.locations["Trees"]
+        if (verb == "enter"):
+            config.the_player.go = True
+            config.the_player.next_loc = self.main_location.locations["Forest"]
+
         # self.item
 
 class Cave(location.SubLocation):
     def __init__(self,m):
         super().__init__(m)
-        self.name = "Sand"
+        self.name = "Cave Entrance"
         self.verbs['north'] = self
         self.verbs['south'] = self
         self.verbs['east'] = self
         self.verbs['west'] = self
         self.verbs['take'] = self
         # self.item
-class Cave(location.SubLocation):
-    def __init__(self, m):
-        super().__init__(m)
-        self.name = "Cave Entrance"
         self.event_chance = 100
-        self.events.append(Cave())
+        #self.events.append(Cave())
 
 
     def enter (self):
-        announce("You have arrived at the front of the Cave's entrance.")
+        display.announce("You have arrived at the front of the Cave's entrance.")
     
     def process_verb (self, verb, cmd_list, nouns):
         if (verb == "south" ):
@@ -122,39 +136,23 @@ class Cave(location.SubLocation):
         self.verbs['read'] = self
         self.tries = 0
         self.solved = False
+        self.event_chance = 100
+        self.events.append(())
 
-    def enter (self):
-        announce("You defeated the enemies guarding the entrance. You notice a Boulder .")
-        announce("The boulder is blocking your path to the Forest. It seems to be a sign on the wall.")
-        announce("The sign has a riddle written on it.")
+def enter (self):
+        description = "You walk upon the beach. You entered into a Cave."
+        display.announce(description)
 
-    def process_verb(self, verb, cmd_list, nouns):
+def process_verb (self, verb, cmd_list, nouns):
         if (verb == "south"):
-            config.the_player.next_loc = self.main_location.locations["Cave"]
-        elif (verb == "north"):
+            config.the_player.next_loc = self.main_location.location["Sand"]
+        if (verb == "east"):
+            config.the_player.next_loc = self.main_location.locations["Treasure"]
+        if (verb == "west"):
+            config.the_player.next_loc = self.main_location.locations["Trees"]
+        if (verb == "enter"):
+            config.the_player.go = True
             config.the_player.next_loc = self.main_location.locations["Forest"]
-        elif (verb == "read"):
-            while self.solved == False:
-                print("If you want to make it to the Forest you must first solve this riddle"
-                  " The riddle states: 'I'm easy to pick up. But hard to throw. What am I")
-                print("You can enter the answer to the riddle or ask for a hint ")
-                answer = input("What is the answer to the riddle?: ")
-                if answer == "feather":
-                   
-
-                    announce("You have moved the Boulder. You can enter the Forest.")
-                    config.the_player.next_loc = self.main_location.locations["Forest"]
-                    self.solved = True
-                elif answer == "hint":
-                    print("I'm light")
-                
-                elif self.tries >= 2:
-                    print("You have gotten it wrong. It was an easy riddle! You can't enter the forest")
-                    config.the_player.gameInProgress = False
-                    config.the_player.kill_all_pirates("In the cave")
-                self.tries += 1
-
-
 
 
 
@@ -168,6 +166,20 @@ class Boulders(location.SubLocation):
         self.verbs['east'] = self
         self.verbs['west'] = self
         self.verbs['take'] = self
+    def enter (self):
+        description = "You walk upon the beach. You entered into a Cave."
+        display.announce(description)
+
+    def process_verb (self, verb, cmd_list, nouns):
+        if (verb == "south"):
+            config.the_player.next_loc = self.main_location.location["Sand"]
+        if (verb == "east"):
+            config.the_player.next_loc = self.main_location.locations["Treasure"]
+        if (verb == "west"):
+            config.the_player.next_loc = self.main_location.locations["Trees"]
+        if (verb == "enter"):
+            config.the_player.go = True
+            config.the_player.next_loc = self.main_location.locations["Forest"]
         # self.item
 
 class Treasure(location.SubLocation):
@@ -179,6 +191,20 @@ class Treasure(location.SubLocation):
         self.verbs['east'] = self
         self.verbs['west'] = self
         self.verbs['take'] = self
+    def enter (self):
+        description = "You walk upon the beach. You entered into a Cave."
+        display.announce(description)
+
+    def process_verb (self, verb, cmd_list, nouns):
+        if (verb == "south"):
+            config.the_player.next_loc = self.main_location.location["Cave"]
+        if (verb == "east"):
+            config.the_player.next_loc = self.main_location.locations["Treasure"]
+        if (verb == "west"):
+            config.the_player.next_loc = self.main_location.locations["Trees"]
+        if (verb == "enter"):
+            config.the_player.go = True
+            config.the_player.next_loc = self.main_location.locations["Forest"]
         # self.item
 
 class Forest(location.SubLocation):
@@ -195,9 +221,9 @@ class Forest(location.SubLocation):
 
     def enter (self):
         edibles = False
-        for e in self.events:
-            if isinstance(e, man_eating_monkeys.ManEatingMonkeys):
-                edibles = True
+        #for e in self.events:
+        #    if isinstance(man_eating_monkeys.ManEatingMonkeys):
+        #        edibles = True
         #The description has a base description, followed by variable components.
         description = "You walk into the small forest on the island."
         if edibles == False:
@@ -208,7 +234,7 @@ class Forest(location.SubLocation):
             description = description + " You see a " + self.item_in_tree.name + " stuck in a tree."
         if self.item_in_clothes != None:
             description = description + " You see a " + self.item_in_clothes.name + " in a pile of shredded clothes on the forest floor."
-        announce (description)
+        display.announce (description)
 
     def process_verb (self, verb, cmd_list, nouns):
         if (verb == "south" or verb == "north" or verb == "east" or verb == "west"):
@@ -216,25 +242,25 @@ class Forest(location.SubLocation):
         #Handle taking items. Demo both "take cutlass" and "take all"
         if verb == "take":
             if self.item_in_tree == None and self.item_in_clothes == None:
-                announce ("You don't see anything to take.")
+                display.announce ("You don't see anything to take.")
             elif len(cmd_list) > 1:
                 at_least_one = False #Track if you pick up an item, print message if not.
                 item = self.item_in_tree
                 if item != None and (cmd_list[1] == item.name or cmd_list[1] == "all"):
-                    announce ("You take the "+item.name+" from the tree.")
+                    display.announce ("You take the "+item.name+" from the tree.")
                     config.the_player.add_to_inventory([item])
                     self.item_in_tree = None
                     config.the_player.go = True
                     at_least_one = True
                 item = self.item_in_clothes
                 if item != None and (cmd_list[1] == item.name or cmd_list[1] == "all"):
-                    announce ("You pick up the "+item.name+" out of the pile of clothes. ...It looks like someone was eaten here.")
+                    display.announce ("You pick up the "+item.name+" out of the pile of clothes. ...It looks like someone was eaten here.")
                     config.the_player.add_to_inventory([item])
                     self.item_in_clothes = None
                     config.the_player.go = True
                     at_least_one = True
                 if at_least_one == False:
-                    announce ("You don't see one of those around.")
+                    display.announce ("You don't see one of those around.")
 class RPG(items.Item):
     def __init__(self):
         super().__init__("", 400)
@@ -388,14 +414,3 @@ locations = {"beach": "You are standing on a sandy beach.","cave": "treasure" "Y
 treasure_location = random.choice(list(locations.keys()))
 #Define the treasure location 
 treasure_location = random.choice(list(locations.keys()))
-while True:
-     print("\n-Pirate Puzzle Game-")
-     print("Answer!")
-     print("\n "+ locations[treasure_location])
-     direction = input("Enter a direction to move(north,south,east,west):").lower()
-     if direction == treasure_location:
-        print("\nCongratulations! You found the hidden treasure at the", treasure_location + "!")
-        break
-     else:
-         print("You didn't find the treasure.Keep searching!")
-     print("\nGame Over")
