@@ -192,7 +192,7 @@ class Treasure(location.SubLocation):
         self.verbs['west'] = self
         self.verbs['take'] = self
     def enter (self):
-        description = "You walk upon the beach. You entered into a Cave."
+        description = "You walk upon the beach. You entered into a Treasure Room."
         display.announce(description)
 
     def process_verb (self, verb, cmd_list, nouns):
