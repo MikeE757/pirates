@@ -1,7 +1,7 @@
-from game import location
+from  game import combat, location
 import game.config as config
 import game.display as display
-from game.events import *
+from   game.events import *
 import game.items as items
 import random
 
@@ -441,7 +441,7 @@ class GiantBugEvent:
         config.the_player.add_to_inventory
         (SawnoffShotgun())
         return result
-class BigBug(BigBug):
+class GiantBigBug:
     def __init_(self):
         attack = {}
         attack["bite"] = ["bite,random(90,100])"]
@@ -465,7 +465,7 @@ class Glock19(items):
             targets = []
             while(len(targets)<self.NUMBER_OF_ATTACKS):
             display.announce(f"Pick target number"len(targets)}, pause= False)
-            choice = menu (options)
+            choice = menu(option):
         if (not choice in targets):
             target.append(enemies[choice])
             return targets
@@ -516,17 +516,14 @@ class PiratePuzzleGame:
         print("You solved the puzzle!")
         print("A magical bridge appears...")
         print("You successfully escape the island!")
-        time.sleep(2)
-        sys.exit()
+        
 
     def die_on_island(self):
         print("GAME OVER!")
         print("You failed to solve the puzzle...")
         print("The island claims another victim.")
         print("You perish alone, trapped forever!")
-        time.sleep(2)
-        sys.exit()
-
+        
 def main():
     while True:
         game = PiratePuzzleGame()
@@ -535,7 +532,7 @@ def main():
         play_again = input("Do you want to play again? (yes/no): ").lower()
         if play_again != 'yes':
             print("Thanks for playing! Farewell, brave pirate!")
-            break class PiratePuzzleGame:
+            break
 def __init__(self):
         self.puzzles = [
             {"riddle": "I have cities, but no houses. I have mountains, but no trees. I have water, but no fish. What am I?",
@@ -545,7 +542,7 @@ def __init__(self):
             {"riddle": "I speak without a mouth and hear without ears. I have no body, but I come alive with wind. What am I?",
                 "answer": "echo"}
         ]
-        self.max_attempts = 3
+        self.max_attempts = 5
 
 def start_game(self):
         print("PIRATE PUZZLE ISLAND ESCAPE")
@@ -578,7 +575,7 @@ def play_puzzle(self):
                     self.die_on_island()
 
 def escape_island(self):
-        print("CONGRATULATIONS!")
+        print("Congratulations!")
         print("You solved the puzzle!")
         print("A magical bridge appears...")
         print("You successfully escape the island!")
@@ -602,3 +599,44 @@ def main():
         if play_again != 'yes':
             print("Thanks for playing pirate!")
             break
+import random
+
+# Initialize the game board
+board_size = 5
+board = [['-' for _ in range(board_size)] for _ in range(board_size)]
+
+# Place the treasure
+treasure_x, treasure_y = random.randint(0, board_size-1), random.randint(0, board_size-1)
+board[treasure_x][treasure_y] = 'T'
+
+# Function to print the board
+def print_board():
+    for row in board:
+        print(' '.join(row))
+
+# Player's starting position
+player_x, player_y = 0, 0
+board[player_x][player_y] = 'P'
+
+# Main game loop
+while True:
+    print_board()
+    move = input("Enter your move (up, down, left, right): ").strip().lower()
+    
+    # Update player's position
+    board[player_x][player_y] = '-'
+    if move == 'up' and player_x > 0:
+        player_x -= 1
+    elif move == 'down' and player_x < board_size - 1:
+        player_x += 1
+    elif move == 'left' and player_y > 0:
+        player_y -= 1
+    elif move == 'right' and player_y < board_size - 1:
+        player_y += 1
+    board[player_x][player_y] = 'P'
+    
+    # Check for treasure
+    if player_x == treasure_x and player_y == treasure_y:
+        print("Congratulations! You found the treasure!")
+        break
+
